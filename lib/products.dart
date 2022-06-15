@@ -72,6 +72,402 @@ class _ProductsState extends State<Products> {
                       child: Row(
                         children: [
                           FutureBuilder<List<Product>>(
+                              future: Service().getMenProducts(),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  return Text(
+                                    snapshot.data![2].category!,
+                                    style: const TextStyle(
+                                        color: Color(0xFF000000),
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold),
+                                  );
+                                } else {
+                                  return CircularProgressIndicator();
+                                }
+                              }),
+                          Container(
+                            padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                            child: const Text(
+                              '(10% Off)',
+                              style: TextStyle(
+                                  color: Color(0xFF69A03A),
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    // Container(
+                    //   margin: const EdgeInsets.fromLTRB(20, 5, 20, 0),
+                    //   alignment: Alignment.topLeft,
+                    //   child: FutureBuilder<List<Product>>(
+                    //       future: Service().getMenProducts(),
+                    //       builder: (context, snapshot) {
+                    //         if (snapshot.hasData) {
+                    //           return Text(
+                    //             snapshot.data![2].description!,
+                    //             style: const TextStyle(
+                    //                 color: Color(0xFF000000),
+                    //                 fontSize: 16,
+                    //                 fontWeight: FontWeight.bold),
+                    //           );
+                    //         } else {
+                    //           return CircularProgressIndicator();
+                    //         }
+                    //       }),
+                    // ),
+                  ],
+                ),
+                Container(
+                  width: double.infinity,
+                  height: 240,
+                  child: FutureBuilder<List<Product>>(
+                      future: Service().getMenProducts(),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          return ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: snapshot.data!.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return GestureDetector(
+                                  child: Container(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                      children: [
+                                        Stack(
+                                          children: [
+                                            Padding(
+                                              padding:
+                                              const EdgeInsets.fromLTRB(
+                                                  20, 16, 0, 0),
+                                              child: Image.network(
+                                                snapshot.data![index].image!,
+                                                width: 118,
+                                                height: 143,
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding:
+                                              const EdgeInsets.fromLTRB(
+                                                  103, 22, 0, 0),
+                                              child: Container(
+                                                width: 30,
+                                                height: 30,
+                                                child: FavoriteButton(
+                                                  iconSize: 25,
+                                                  isFavorite: false,
+                                                  valueChanged: (_isFavorite) {
+                                                    print(
+                                                        'Is Favorite : $_isFavorite');
+                                                  },
+                                                ),
+                                                decoration: const BoxDecoration(
+                                                  color: Colors.white,
+                                                  borderRadius:
+                                                  BorderRadius.all(
+                                                      Radius.circular(50)),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        Container(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                            children: [
+                                              Container(
+                                                margin:
+                                                const EdgeInsets.fromLTRB(
+                                                    20, 8, 0, 0),
+                                                child: RatingBarIndicator(
+                                                  rating: snapshot.data![index]
+                                                      .rating!.rate!,
+                                                  itemBuilder: (context,
+                                                      index) =>
+                                                  const Icon(Icons.star,
+                                                      color: Colors.amber),
+                                                  itemCount: 5,
+                                                  itemSize: 18.0,
+                                                  direction: Axis.horizontal,
+                                                ),
+                                              ),
+                                              Container(
+                                                margin:
+                                                const EdgeInsets.fromLTRB(
+                                                    20, 8, 0, 0),
+                                                child: Text(
+                                                  snapshot.data![index].title!,
+                                                  style: const TextStyle(
+                                                      color: Color(0xFF393939),
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                      FontWeight.bold),
+                                                ),
+                                              ),
+                                              Container(
+                                                margin:
+                                                const EdgeInsets.fromLTRB(
+                                                    20, 8, 0, 0),
+                                                child: Row(
+                                                  children: [
+                                                    Container(
+                                                      width: 6,
+                                                      height: 10,
+                                                      child: Image.asset(
+                                                          'assets/images/money.jpeg'),
+                                                    ),
+                                                    Container(
+                                                      padding: const EdgeInsets
+                                                          .fromLTRB(6, 0, 0, 0),
+                                                      child: Text(
+                                                        snapshot
+                                                            .data![index].price!
+                                                            .toString(),
+                                                        style: const TextStyle(
+                                                            fontSize: 12,
+                                                            fontWeight:
+                                                            FontWeight
+                                                                .w500),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  onTap: () => Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => ProductSingle(
+                                              snapshot.data![index].id))));
+                            },
+                          );
+                        } else {
+                          return const Center(
+                              child: CircularProgressIndicator());
+                        }
+                      }),
+                ),
+
+
+                Column(
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.fromLTRB(20, 10, 0, 0),
+                      child: Row(
+                        children: [
+                          FutureBuilder<List<Product>>(
+                              future: Service().getWomenProducts(),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  return Text(
+                                    snapshot.data![3].category!,
+                                    style: const TextStyle(
+                                        color: Color(0xFF000000),
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold),
+                                  );
+                                } else {
+                                  return const CircularProgressIndicator();
+                                }
+                              }),
+                          Container(
+                            padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                            child: const Text(
+                              '(10% Off)',
+                              style: TextStyle(
+                                  color: Color(0xFF69A03A),
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    // Container(
+                    //   margin: const EdgeInsets.fromLTRB(20, 5, 20, 0),
+                    //   alignment: Alignment.topLeft,
+                    //   child: FutureBuilder<List<Product>>(
+                    //       future: Service().getWomenProducts(),
+                    //       builder: (context, snapshot) {
+                    //         if (snapshot.hasData) {
+                    //           return Text(
+                    //             snapshot.data![3].description!,
+                    //             style: const TextStyle(
+                    //                 color: Color(0xFF000000),
+                    //                 fontSize: 16,
+                    //                 fontWeight: FontWeight.bold),
+                    //           );
+                    //         } else {
+                    //           return const CircularProgressIndicator();
+                    //         }
+                    //       }),
+                    // ),
+                  ],
+                ),
+
+                Container(
+                    width: double.infinity,
+                    height: 240,
+                    child: FutureBuilder<List<Product>>(
+                        future: Service().getWomenProducts(),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            return ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemCount: snapshot.data!.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return GestureDetector(
+                                    child: Container(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                        children: [
+                                          Stack(
+                                            children: [
+                                              Padding(
+                                                padding:
+                                                const EdgeInsets.fromLTRB(
+                                                    20, 16, 0, 0),
+                                                child: Image.network(
+                                                  snapshot.data![index].image!,
+                                                  width: 118,
+                                                  height: 143,
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding:
+                                                const EdgeInsets.fromLTRB(
+                                                    103, 22, 0, 0),
+                                                child: Container(
+                                                  width: 30,
+                                                  height: 30,
+                                                  child: FavoriteButton(
+                                                    iconSize: 25,
+                                                    isFavorite: false,
+                                                    valueChanged:
+                                                        (_isFavorite) {
+                                                      print(
+                                                          'Is Favorite : $_isFavorite');
+                                                    },
+                                                  ),
+                                                  decoration:
+                                                  const BoxDecoration(
+                                                    color: Colors.white,
+                                                    borderRadius:
+                                                    BorderRadius.all(
+                                                        Radius.circular(
+                                                            50)),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          Container(
+                                            child: Column(
+                                              crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                              children: [
+                                                Container(
+                                                  margin:
+                                                  const EdgeInsets.fromLTRB(
+                                                      20, 8, 0, 0),
+                                                  child: RatingBarIndicator(
+                                                    rating: snapshot
+                                                        .data![index]
+                                                        .rating!
+                                                        .rate!,
+                                                    itemBuilder: (context,
+                                                        index) =>
+                                                    const Icon(Icons.star,
+                                                        color:
+                                                        Colors.amber),
+                                                    itemCount: 5,
+                                                    itemSize: 18.0,
+                                                    direction: Axis.horizontal,
+                                                  ),
+                                                ),
+                                                Container(
+                                                  margin:
+                                                  const EdgeInsets.fromLTRB(
+                                                      20, 8, 0, 0),
+                                                  child: Text(
+                                                    snapshot
+                                                        .data![index].title!,
+                                                    style: const TextStyle(
+                                                        color:
+                                                        Color(0xFF393939),
+                                                        fontSize: 14,
+                                                        fontWeight:
+                                                        FontWeight.bold),
+                                                  ),
+                                                ),
+                                                Container(
+                                                  margin:
+                                                  const EdgeInsets.fromLTRB(
+                                                      20, 8, 0, 0),
+                                                  child: Row(
+                                                    children: [
+                                                      Container(
+                                                        width: 6,
+                                                        height: 10,
+                                                        child: Image.asset(
+                                                            'assets/images/money.jpeg'),
+                                                      ),
+                                                      Container(
+                                                        padding:
+                                                        const EdgeInsets
+                                                            .fromLTRB(
+                                                            6, 0, 0, 0),
+                                                        child: Text(
+                                                          snapshot.data![index]
+                                                              .price!
+                                                              .toString(),
+                                                          style: const TextStyle(
+                                                              fontSize: 12,
+                                                              fontWeight:
+                                                              FontWeight
+                                                                  .w500),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    onTap: () => Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => ProductSingle(
+                                                snapshot.data![index].id))));
+                              },
+                            );
+                          } else {
+                            return Center(
+                                child: const CircularProgressIndicator());
+                          }
+                        })),
+
+                Column(
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.fromLTRB(20, 10, 0, 0),
+                      child: Row(
+                        children: [
+                          FutureBuilder<List<Product>>(
                               future: Service().getElectronics(),
                               builder: (context, snapshot) {
                                 if (snapshot.hasData) {
@@ -278,7 +674,7 @@ class _ProductsState extends State<Products> {
                               builder: (context, snapshot) {
                                 if (snapshot.hasData) {
                                   return Text(
-                                    snapshot.data![0].category!,
+                                    snapshot.data![1].category!,
                                     style: const TextStyle(
                                         color: Color(0xFF000000),
                                         fontSize: 18,
@@ -469,401 +865,7 @@ class _ProductsState extends State<Products> {
                           }
                         })),
 
-                Column(
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.fromLTRB(20, 10, 0, 0),
-                      child: Row(
-                        children: [
-                          FutureBuilder<List<Product>>(
-                              future: Service().getMenProducts(),
-                              builder: (context, snapshot) {
-                                if (snapshot.hasData) {
-                                  return Text(
-                                    snapshot.data![2].category!,
-                                    style: const TextStyle(
-                                        color: Color(0xFF000000),
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold),
-                                  );
-                                } else {
-                                  return CircularProgressIndicator();
-                                }
-                              }),
-                          Container(
-                            padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-                            child: const Text(
-                              '(10% Off)',
-                              style: TextStyle(
-                                  color: Color(0xFF69A03A),
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    // Container(
-                    //   margin: const EdgeInsets.fromLTRB(20, 5, 20, 0),
-                    //   alignment: Alignment.topLeft,
-                    //   child: FutureBuilder<List<Product>>(
-                    //       future: Service().getMenProducts(),
-                    //       builder: (context, snapshot) {
-                    //         if (snapshot.hasData) {
-                    //           return Text(
-                    //             snapshot.data![2].description!,
-                    //             style: const TextStyle(
-                    //                 color: Color(0xFF000000),
-                    //                 fontSize: 16,
-                    //                 fontWeight: FontWeight.bold),
-                    //           );
-                    //         } else {
-                    //           return CircularProgressIndicator();
-                    //         }
-                    //       }),
-                    // ),
-                  ],
-                ),
-                Container(
-                  width: double.infinity,
-                  height: 240,
-                  child: FutureBuilder<List<Product>>(
-                      future: Service().getMenProducts(),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          return ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: snapshot.data!.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              return GestureDetector(
-                                  child: Container(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Stack(
-                                          children: [
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.fromLTRB(
-                                                      20, 16, 0, 0),
-                                              child: Image.network(
-                                                snapshot.data![index].image!,
-                                                width: 118,
-                                                height: 143,
-                                              ),
-                                            ),
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.fromLTRB(
-                                                      103, 22, 0, 0),
-                                              child: Container(
-                                                width: 30,
-                                                height: 30,
-                                                child: FavoriteButton(
-                                                  iconSize: 25,
-                                                  isFavorite: false,
-                                                  valueChanged: (_isFavorite) {
-                                                    print(
-                                                        'Is Favorite : $_isFavorite');
-                                                  },
-                                                ),
-                                                decoration: const BoxDecoration(
-                                                  color: Colors.white,
-                                                  borderRadius:
-                                                      BorderRadius.all(
-                                                          Radius.circular(50)),
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        Container(
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Container(
-                                                margin:
-                                                    const EdgeInsets.fromLTRB(
-                                                        20, 8, 0, 0),
-                                                child: RatingBarIndicator(
-                                                  rating: snapshot.data![index]
-                                                      .rating!.rate!,
-                                                  itemBuilder: (context,
-                                                          index) =>
-                                                      const Icon(Icons.star,
-                                                          color: Colors.amber),
-                                                  itemCount: 5,
-                                                  itemSize: 18.0,
-                                                  direction: Axis.horizontal,
-                                                ),
-                                              ),
-                                              Container(
-                                                margin:
-                                                    const EdgeInsets.fromLTRB(
-                                                        20, 8, 0, 0),
-                                                child: Text(
-                                                  snapshot.data![index].title!,
-                                                  style: const TextStyle(
-                                                      color: Color(0xFF393939),
-                                                      fontSize: 14,
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                ),
-                                              ),
-                                              Container(
-                                                margin:
-                                                    const EdgeInsets.fromLTRB(
-                                                        20, 8, 0, 0),
-                                                child: Row(
-                                                  children: [
-                                                    Container(
-                                                      width: 6,
-                                                      height: 10,
-                                                      child: Image.asset(
-                                                          'assets/images/money.jpeg'),
-                                                    ),
-                                                    Container(
-                                                      padding: const EdgeInsets
-                                                          .fromLTRB(6, 0, 0, 0),
-                                                      child: Text(
-                                                        snapshot
-                                                            .data![index].price!
-                                                            .toString(),
-                                                        style: const TextStyle(
-                                                            fontSize: 12,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w500),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  onTap: () => Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => ProductSingle(
-                                              snapshot.data![index].id))));
-                            },
-                          );
-                        } else {
-                          return const Center(
-                              child: CircularProgressIndicator());
-                        }
-                      }),
-                ),
 
-
-                Column(
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.fromLTRB(20, 10, 0, 0),
-                      child: Row(
-                        children: [
-                          FutureBuilder<List<Product>>(
-                              future: Service().getWomenProducts(),
-                              builder: (context, snapshot) {
-                                if (snapshot.hasData) {
-                                  return Text(
-                                    snapshot.data![3].category!,
-                                    style: const TextStyle(
-                                        color: Color(0xFF000000),
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold),
-                                  );
-                                } else {
-                                  return const CircularProgressIndicator();
-                                }
-                              }),
-                          Container(
-                            padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-                            child: const Text(
-                              '(10% Off)',
-                              style: TextStyle(
-                                  color: Color(0xFF69A03A),
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-
-                    // Container(
-                    //   margin: const EdgeInsets.fromLTRB(20, 5, 20, 0),
-                    //   alignment: Alignment.topLeft,
-                    //   child: FutureBuilder<List<Product>>(
-                    //       future: Service().getWomenProducts(),
-                    //       builder: (context, snapshot) {
-                    //         if (snapshot.hasData) {
-                    //           return Text(
-                    //             snapshot.data![3].description!,
-                    //             style: const TextStyle(
-                    //                 color: Color(0xFF000000),
-                    //                 fontSize: 16,
-                    //                 fontWeight: FontWeight.bold),
-                    //           );
-                    //         } else {
-                    //           return const CircularProgressIndicator();
-                    //         }
-                    //       }),
-                    // ),
-                  ],
-                ),
-
-                Container(
-                    width: double.infinity,
-                    height: 240,
-                    child: FutureBuilder<List<Product>>(
-                        future: Service().getWomenProducts(),
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) {
-                            return ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              itemCount: snapshot.data!.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                return GestureDetector(
-                                    child: Container(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Stack(
-                                            children: [
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.fromLTRB(
-                                                        20, 16, 0, 0),
-                                                child: Image.network(
-                                                  snapshot.data![index].image!,
-                                                  width: 118,
-                                                  height: 143,
-                                                ),
-                                              ),
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.fromLTRB(
-                                                        103, 22, 0, 0),
-                                                child: Container(
-                                                  width: 30,
-                                                  height: 30,
-                                                  child: FavoriteButton(
-                                                    iconSize: 25,
-                                                    isFavorite: false,
-                                                    valueChanged:
-                                                        (_isFavorite) {
-                                                      print(
-                                                          'Is Favorite : $_isFavorite');
-                                                    },
-                                                  ),
-                                                  decoration:
-                                                      const BoxDecoration(
-                                                    color: Colors.white,
-                                                    borderRadius:
-                                                        BorderRadius.all(
-                                                            Radius.circular(
-                                                                50)),
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          Container(
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Container(
-                                                  margin:
-                                                      const EdgeInsets.fromLTRB(
-                                                          20, 8, 0, 0),
-                                                  child: RatingBarIndicator(
-                                                    rating: snapshot
-                                                        .data![index]
-                                                        .rating!
-                                                        .rate!,
-                                                    itemBuilder: (context,
-                                                            index) =>
-                                                        const Icon(Icons.star,
-                                                            color:
-                                                                Colors.amber),
-                                                    itemCount: 5,
-                                                    itemSize: 18.0,
-                                                    direction: Axis.horizontal,
-                                                  ),
-                                                ),
-                                                Container(
-                                                  margin:
-                                                      const EdgeInsets.fromLTRB(
-                                                          20, 8, 0, 0),
-                                                  child: Text(
-                                                    snapshot
-                                                        .data![index].title!,
-                                                    style: const TextStyle(
-                                                        color:
-                                                            Color(0xFF393939),
-                                                        fontSize: 14,
-                                                        fontWeight:
-                                                            FontWeight.bold),
-                                                  ),
-                                                ),
-                                                Container(
-                                                  margin:
-                                                      const EdgeInsets.fromLTRB(
-                                                          20, 8, 0, 0),
-                                                  child: Row(
-                                                    children: [
-                                                      Container(
-                                                        width: 6,
-                                                        height: 10,
-                                                        child: Image.asset(
-                                                            'assets/images/money.jpeg'),
-                                                      ),
-                                                      Container(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                    .fromLTRB(
-                                                                6, 0, 0, 0),
-                                                        child: Text(
-                                                          snapshot.data![index]
-                                                              .price!
-                                                              .toString(),
-                                                          style: const TextStyle(
-                                                              fontSize: 12,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w500),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    onTap: () => Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => ProductSingle(
-                                                snapshot.data![index].id))));
-                              },
-                            );
-                          } else {
-                            return Center(
-                                child: const CircularProgressIndicator());
-                          }
-                        })),
               ],
             ),
           ),

@@ -37,9 +37,12 @@ class Service {
 
   Future<List<Product>> getElectronics() async{
     var responce =  await http.get(Uri.parse(_mainUrl+"category/electronics"));
+    print("---------------------------------------------------------electronics------------------------------------"+responce.statusCode.toString());
     if(responce.statusCode == 200){
       final json = jsonDecode(responce.body);
       final List productList = json;
+      print("---------------------------------------------------------"+productList.toString());
+
       return productList.map((item){
         return Product.fromJson(item);
       }).toList();

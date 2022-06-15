@@ -1,5 +1,6 @@
 import 'package:favorite_button/favorite_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'helpers/webservice_manager.dart';
 import 'models/product.dart';
 
@@ -84,12 +85,36 @@ class ProductSingle extends StatelessWidget{
                               Align(
                                   alignment: Alignment.bottomLeft,
                                   child: Container(
-                                    margin: const EdgeInsets.only(bottom: 15, top: 15),
+                                    margin: const EdgeInsets.only(bottom: 5, top: 15),
                                     child:  Text(
                                       snapshot.data!.title!,
                                       style: TextStyle(fontSize: 18),
                                     ),
-                                  )),
+                                  )
+                              ),
+
+                              Align(
+                                  alignment: Alignment.bottomLeft,
+                                  child: Container(
+                                    margin: const EdgeInsets.only(bottom: 5),
+                                    child: RatingBarIndicator(
+                                      rating: snapshot
+                                          .data!
+                                          .rating!
+                                          .rate!,
+                                      itemBuilder: (context,
+                                          index) =>
+                                      const Icon(Icons.star,
+                                          color:
+                                          Colors.amber),
+                                      itemCount: 5,
+                                      itemSize: 18.0,
+                                      direction: Axis.horizontal,
+                                    ),
+                                  ),
+                              ),
+
+
                               Align(
                                 alignment: Alignment.bottomLeft,
                                 child: Container(
